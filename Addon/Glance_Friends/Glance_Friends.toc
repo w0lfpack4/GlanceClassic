@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffFriends|r
+## X-DisplayName: Friends
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Displays the number of friends and Real-ID friends online, their class, level, and zone.
+## X-new: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Friends.lua

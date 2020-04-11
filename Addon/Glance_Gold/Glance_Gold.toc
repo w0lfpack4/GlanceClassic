@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffGold|r
+## X-DisplayName: Gold
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Displays the gold in your account, for each faction, and toon.  Displays how much gold you make per hour and per session.
+## X-new: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Gold.lua

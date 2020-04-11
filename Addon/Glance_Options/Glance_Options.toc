@@ -1,0 +1,17 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffOptions|r
+## X-DisplayName: Options
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Built-In module to display the Option Panel.
+## X-new: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Controls.lua
+Functions.lua
+Options.lua

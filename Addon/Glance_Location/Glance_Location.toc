@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffLocation|r
+## X-DisplayName: Location
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Displays the player's location by Zone, SubZone, and map coordinates. Displays current speed when moving.
+## X-new: Added option for 4 digit coordinates.
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Location.lua

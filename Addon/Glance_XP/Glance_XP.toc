@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffXP|r
+## X-DisplayName: XP
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Displays experience as a percent.  Tooltip displays time played, XP, rested XP, time to level, how many quests/kills to level.  Party stats available.
+## X-New: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+XP.lua

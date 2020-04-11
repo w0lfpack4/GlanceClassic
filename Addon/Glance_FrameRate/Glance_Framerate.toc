@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffFramerate|r
+## X-DisplayName: Framerate
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 7, 2020
+## X-Category: Broker
+## X-Description: Displays your framerate.  Frames per second.  The higher the better.  Party stats available.
+## X-new: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Framerate.lua
