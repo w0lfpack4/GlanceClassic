@@ -1,42 +1,32 @@
----------------------------
--- lets simplify a bit..
----------------------------
-local gf = Glance.Functions
-local gv = Glance.Variables
 local ga = Glance.Arrays
-local gb = Glance.Buttons
+ga.Quests = {}
 
----------------------------
--- create the button
----------------------------
-gf.AddButton("Quests","RIGHT")
-local btn = gb.Quests
-btn.text              = "      "
-btn.texture.normal    = "Interface\\AddOns\\Glance_Quests\\icon.tga"
-btn.events            = {"QUEST_COMPLETE"}
-btn.enabled           = true
-btn.update            = true
-btn.tooltip           = false
-btn.click             = false
-btn.menu              = false
-btn.save.perCharacter = {["CountTradeBagSlots"] = false, ["Display"] = "Free", ["Title"] = "Icon"}
-
-
----------------------------
--- update
----------------------------
-function gf.Quests.update(self, event, arg1)
-	if btn.enabled and gv.loaded then
-		Glance.Debug("function","update","Quests")
-		if event == "QUEST_COMPLETE" then
-			PlaySoundFile("Interface\\AddOns\\Glance_Quests\\QuestComplete")
-		end if
+OldGetQuestLogTitle = GetQuestLogTitle
+function GetQuestLogTitle(questLogID)
+	-- get original settings
+	local title, level, groupCnt, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isBounty, isStory, isHidden = OldGetQuestLogTitle(questLogID);
+	
+	if isComplete then
+		-- failed
+		if isComplete == -1 then 
+			if not isHeader then ga.Quests[title] = { ["complete"] = nil,} end	
+		-- complete
+		elseif isComplete == 1 then 
+			-- found quest, play sound
+			if ga.Quests[title] and not ga.Quests[title].complete then
+				--play sound
+				PlaySoundFile("Interface\\AddOns\\Glance_Quests\\QuestComplete.ogg")
+				if not isHeader then ga.Quests[title] = { ["complete"] = true,} end
+			else
+				-- no quest entry, first run
+				if not isHeader then ga.Quests[title] = { ["complete"] = true,} end
+			end
+		end
+	-- quest active, populate the quest in db
+	else
+		if title and not isHeader then ga.Quests[title] = { ["complete"] = nil,} end
 	end
-end
-
----------------------------
--- load on demand
----------------------------
-if gv.loaded then
-	gf.Enable("Quests")
+	
+	--CancelEmote()
+	return title, level, groupCnt, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isBounty, isStory, isHidden
 end
