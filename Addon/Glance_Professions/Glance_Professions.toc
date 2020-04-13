@@ -3,11 +3,11 @@
 ## X-DisplayName: Professions
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.1
-## X-Updated: April 7, 2020
+## Version: 1.13.4.2
+## X-Updated: April 13, 2020
 ## X-Category: Broker
 ## X-Description: Track profession skill levels.  When tracking gathering skills, the tooltip will suggest what you should be farming, and where.
-## X-new: Added bonus points display for racial traits, equipment, and lures.  Minor tweak to racial bonuses.
+## X-new: Fixed button click when tracking gathering professions
 
 ## Dependencies: Glance
 ## LoadOnDemand: 1

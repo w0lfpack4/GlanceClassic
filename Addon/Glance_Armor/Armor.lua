@@ -443,12 +443,12 @@ function gf.Armor.repair.repairAll()
 						gf.sendMSG("You don't have enough money for repair!");
 					else
 						RepairAllItems();
-						--PlaySound("LOOTWINDOWCOINSOUND")
+						PlaySound(SOUNDKIT.LOOT_WINDOW_COIN_SOUND)
 						gf.sendMSG("There was not enough money in your daily guild bank allotment for repair.  Your items have been repaired from your own funds for "..GetCoinTextureString(cost,0))		
 					end
 				else
 					RepairAllItems(1)
-					--PlaySound("LOOTWINDOWCOINSOUND")
+					PlaySound(SOUNDKIT.LOOT_WINDOW_COIN_SOUND)
 					gf.sendMSG("Your items have been repaired by the guild for "..GetCoinTextureString(cost,0))
 					return
 				end
@@ -458,7 +458,7 @@ function gf.Armor.repair.repairAll()
 					gf.sendMSG("You don't have enough money for repair!");
 				else
 					RepairAllItems();
-					--PlaySound("LOOTWINDOWCOINSOUND")
+					PlaySound(SOUNDKIT.LOOT_WINDOW_COIN_SOUND)
 					gf.sendMSG("Your items have been repaired for "..GetCoinTextureString(cost,0))	
 				end
 			end

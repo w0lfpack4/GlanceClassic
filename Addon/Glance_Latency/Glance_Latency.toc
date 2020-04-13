@@ -3,7 +3,7 @@
 ## X-DisplayName: Latency
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.1
+## Version: 1.13.4.2
 ## X-Updated: April 7, 2020
 ## X-Category: Broker
 ## X-Description: Displays the player's latency (lag).  This is the time it takes to communicate between client and server.  Party stats available.

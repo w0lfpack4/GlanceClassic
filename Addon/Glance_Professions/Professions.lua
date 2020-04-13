@@ -158,10 +158,11 @@ end
 function gf.Professions.click(self, button, down)
 	Glance.Debug("function","click","Professions")
 	if button == "LeftButton" then
-		--ToggleSpellBook("professions") -- causes permission error now..
-		--ToggleFrame(SpellBookFrame)
-		if (spc.Spell~="") then
+		-- no profession window on gathering
+		if (spc.Spell~="" and spc.Spell~="Fishing" and spc.Spell~="Mining" and spc.Spell~="Herbalism" and spc.Spell~="Skinning") then
 			CastSpellByName(spc.Spell)
+		else
+			ToggleFrame(SpellBookFrame)
 		end
 	end
 end

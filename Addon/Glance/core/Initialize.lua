@@ -20,7 +20,7 @@ function gf.createButton(anchor,i)
 		v.button = CreateFrame("BUTTON", "Glance_Buttons_"..v.name, Glance.Frames.topFrame)
 		--v.button.texture = v.button:CreateTexture()
 		--v.button.texture:SetAllPoints(v.button)
-		--v.button.texture:SetTexture(1, 1, 1, .7)
+		--v.button.texture:SetColorTexture(1, 1, 1, .7)
 		--v.button.texture:SetGradientAlpha("VERTICAL", 0, 0, 0, .7, .5, .5, .5, .7) 
 		local btn = v.button
 		-- set button height
@@ -881,18 +881,18 @@ function gf.loadFrame()
 	cf:SetFrameStrata("HIGH")
 	
 	--[[local c = cf:CreateTexture(nil, "BACKGROUND")
-	c:SetTexture(1, 0, 0, .5)
+	c:SetColorTexture(1, 0, 0, .5)
 	c:SetAllPoints(cf)
 	cf.texture = c]]
 	
 	local t = tf:CreateTexture(nil, "BACKGROUND")
-	t:SetTexture(0, 0, 0, .5)
+	t:SetColorTexture(0, 0, 0, .5)
 	--t:SetTexture("Interface\\AddOns\\Glance\Skins\carbonfiber.tga",true); --gf.setBackground(n) overrides this.. go there	
 	t:SetAllPoints(tf)
 	tf.texture = t 	
 	
 	local t2 = tf:CreateTexture("GlanceBorder", "BORDER")
-	t2:SetTexture(.4, .4, .4)
+	t2:SetColorTexture(.4, .4, .4)
 	t2:SetPoint("TOPLEFT", tf, "BOTTOMLEFT", 0, 0)
 	t2:SetPoint("TOPRIGHT", tf, "BOTTOMRIGHT", 0, 0)
 	t2:SetWidth(gv.screenWidth)
