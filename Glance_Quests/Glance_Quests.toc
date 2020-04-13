@@ -1,0 +1,15 @@
+## Interface: 11304
+## Title: |cff0279ffGlance: |cffffffffQuests|r
+## X-DisplayName: Quests
+## Notes: Load on Demand Data Broker for Glance
+## Author: vonbek
+## Version: 1.13.4.1
+## X-Updated: April 12, 2020
+## X-Category: Broker
+## X-Description: PLays Carbonite's Quest Complete sound
+## X-new: 
+
+## Dependencies: Glance
+## LoadOnDemand: 1
+
+Quests.lua

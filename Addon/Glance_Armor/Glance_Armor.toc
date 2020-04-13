@@ -3,11 +3,11 @@
 ## X-DisplayName: Armor
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.1
-## X-Updated: April 7, 2020
+## Version: 1.13.4.2
+## X-Updated: April 13, 2020
 ## X-Category: Broker
 ## X-Description: Displays the durability of the player's armor, the repair cost, the current item level.  Can Auto-Repair the player's armor at a vendor. Option to use guild funds.   Party stats available.
-## X-New: Added item level overlays on character frame, inspect frame, and tooltip when a target is selected.  Updated item level colors.
+## X-New: Fixed sounds
 
 ## Dependencies: Glance
 ## LoadOnDemand: 1
