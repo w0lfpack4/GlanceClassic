@@ -250,7 +250,7 @@ function gf.Armor.tooltip()
 	if ((GetNumPartyMembers ~= 0 and sender ~= UnitName("player")) or gv.Debug) and Glance_Local.Options.sendStats then
 		gf.addonQuery("Armor")
 		tooltip.Space()
-		tooltip.Double("Party"..gf.crossRealm(), "(eLVL/iLVL)/DUR", "GLD", "GLD")	
+		tooltip.Double("Party"..gf.crossRealm(), "iLVL/DUR", "GLD", "GLD")	
 		gf.partyTooltip("Armor")
 	end	
 	

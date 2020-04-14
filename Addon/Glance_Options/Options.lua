@@ -134,14 +134,14 @@ function gf.createOptionsPanel()
 	Glance.CheckBoxes[cb()] = {2,15,-200,"moveTarget","Target Frame",nil,function() gf.moveUI() end, Glance_Local.Options.showLow or Glance_Local.Options.autoHide}
 	Glance.CheckBoxes[cb()] = {2,15,-220,"moveBuffs","Buffs",nil,function() gf.moveUI() end, Glance_Local.Options.showLow or Glance_Local.Options.autoHide}
 	Glance.CheckBoxes[cb()] = {2,15,-240,"moveMinimap","Minimap",nil,function() gf.moveUI() end, Glance_Local.Options.showLow or Glance_Local.Options.autoHide}
-	Glance.CheckBoxes[cb()] = {2,15,-260,"reposition","Reposition Player and Target frames when entering/exiting vehicles.",nil,nil, Glance_Local.Options.showLow or Glance_Local.Options.autoHide}
+	if (GetExpansionLevel() > 0)  then Glance.CheckBoxes[cb()] = {2,15,-260,"reposition","Reposition Player and Target frames when entering/exiting vehicles.",nil,nil, Glance_Local.Options.showLow or Glance_Local.Options.autoHide} end
 	
 	-- PANEL 2: hide options
 	---------------------------
 	Glance.Text[tb()] = {2,0,-300,"Auto-Hide Options","GameFontNormal",""}
 	Glance.CheckBoxes[cb()] = {2,15,-320,"autoHide","Auto-Hide the bar until mouseover",nil,function() gf.autoHide(false); checkAutoHide(); end,false}
-	Glance.CheckBoxes[cb()] = {2,15,-340,"autoHidePet","Auto-Hide the bar during Pet Battles",nil,nil,Glance_Local.Options.autoHide}
-	Glance.CheckBoxes[cb()] = {2,15,-360,"autoHideVehicle","Auto-Hide the bar in Vehicles",nil,nil,Glance_Local.Options.autoHide}
+	if (GetExpansionLevel() > 0)  then Glance.CheckBoxes[cb()] = {2,15,-340,"autoHideVehicle","Auto-Hide the bar in Vehicles",nil,nil,Glance_Local.Options.autoHide} end
+	if (GetExpansionLevel() > 4)  then Glance.CheckBoxes[cb()] = {2,15,-360,"autoHidePet","Auto-Hide the bar during Pet Battles",nil,nil,Glance_Local.Options.autoHide} end
 	
 	-- PANEL 2: other options
 	---------------------------
