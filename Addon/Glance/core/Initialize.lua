@@ -366,29 +366,21 @@ function gf.setPreferredOrder()
 	Glance_Local.button.order = {
 		["RIGHT"] = {
 			"Options", -- [1]
-			"Titles", -- [2]
-			"Dungeons", -- [3]
-			"DualSpec", -- [4]
-			"Pets", -- [5]
-			"Mounts", -- [6]
-			"Clock", -- [7]
-			"Location", -- [8]
+			"Clock", -- [2]
+			"Location", -- [3]
 		},
 		["LEFT"] = {
 			"Gold", -- [1]
-			"Emblems", -- [2]
-			"Bags", -- [3]
-			"Friends", -- [4]
-			"Guild", -- [5]
-			"Armor", -- [6]
-			"XP", -- [7]
-			"Reputation", -- [8]
-			"Professions", -- [9]
-			"Latency", -- [10]
-			"Framerate", -- [11]
-			"Memory", -- [12]
-			"WinterGrasp", -- [13]
-			"TolBarad", -- [14]
+			"Bags", -- [2]
+			"Friends", -- [3]
+			"Guild", -- [4]
+			"Armor", -- [5]
+			"XP", -- [6]
+			"Reputation", -- [7]
+			"Professions", -- [8]
+			"Latency", -- [9]
+			"Framerate", -- [10]
+			"Memory", -- [11]
 		},
 	}
 end
@@ -695,7 +687,7 @@ function gf.addonLoaded()
 	gf.loadDefaultVariables()
 	gf.setBackground(1)
 	-- needed for comm
-	--RegisterAddonMessagePrefix("Glance")
+	C_ChatInfo.RegisterAddonMessagePrefix("Glance")
 	Glance.Frames.topFrame:SetText("modules loaded.  configuring...")
 end
 
@@ -924,12 +916,14 @@ function gf.Initialize()
 	Glance.Frames.topFrame:RegisterEvent("TIME_PLAYED_MSG")
 	Glance.Frames.topFrame:RegisterEvent("CHAT_MSG_ADDON")
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	--Glance.Frames.topFrame:RegisterEvent("UNIT_ENTERING_VEHICLE")
-	--Glance.Frames.topFrame:RegisterEvent("UNIT_EXITING_VEHICLE")
+	if (GetExpansionLevel() > 0)  then Glance.Frames.topFrame:RegisterEvent("UNIT_ENTERING_VEHICLE") end
+	if (GetExpansionLevel() > 0)  then Glance.Frames.topFrame:RegisterEvent("UNIT_EXITING_VEHICLE") end
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_UPDATE_RESTING")
 	Glance.Frames.topFrame:RegisterEvent("SAVED_VARIABLES_TOO_LARGE")
+	if (GetExpansionLevel() > 4)  then Glance.Frames.topFrame:RegisterEvent("PET_BATTLE_OPENING_START") end
+	if (GetExpansionLevel() > 4)  then Glance.Frames.topFrame:RegisterEvent("PET_BATTLE_CLOSE") end
 	gf.handleEvents()
 	--Glance.Frames.bottomFrame:Show()
 end

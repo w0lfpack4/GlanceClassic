@@ -3,7 +3,7 @@
 ## X-DisplayName: Reputation
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.2
+## Version: 1.13.4.3
 ## X-Updated: April 7, 2020
 ## X-Category: Broker
 ## X-Description: Useful for tracking reputation.  Displays current reputation as a percent, or by how many points remain untill the next level.

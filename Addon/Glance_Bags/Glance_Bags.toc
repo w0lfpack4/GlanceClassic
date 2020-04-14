@@ -3,7 +3,7 @@
 ## X-DisplayName: Bags
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.2
+## Version: 1.13.4.3
 ## X-Updated: April 7, 2020
 ## X-Category: Broker
 ## X-Description: Displays the player's free bag slots
