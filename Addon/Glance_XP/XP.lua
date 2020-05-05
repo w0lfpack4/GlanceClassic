@@ -16,7 +16,7 @@ btn.enabled           = true
 btn.events            = {"PLAYER_LEVEL_UP","CHAT_MSG_COMBAT_XP_GAIN","QUEST_COMPLETE","PLAYER_XP_UPDATE"}
 btn.update            = true
 btn.tooltip           = true
-btn.save.perCharacter = {["xp"] = {["kills2level"] = 0,["quests2level"] = 0,["gathers2level"] = 0,}}
+btn.save.perCharacter = {["xp"] = {["kills2level"] = 0,["quests2level"] = 0,["gathers2level"] = 0,["discoveries2level"] = 0,}}
 
 ---------------------------
 -- shortcuts
@@ -36,6 +36,7 @@ gv["xp"] = {
 	["level"] = 0,
 	["cap"] = 0,
 	["accumulated"] = 0,
+	["previous"] = UnitXP("player"),
 	["current"] = 0,
 	["currentPCT"] = 0,
 	["init"] = UnitXP("player"),
@@ -57,7 +58,10 @@ gv["xp"] = {
 	["kills2level"] = 0,
 	["quests2level"] = 0,
 	["gathers2level"] = 0,
+	["discoveries2level"] = 0,
 	["questCompleteOpen"] = false,
+	["slayedCreature"] = false,
+	["slayedNode"] = false,
 	["kills"] = {
 		["avg"] = 0,
 		["current"] = 0,
@@ -73,6 +77,13 @@ gv["xp"] = {
 		["count"] = 0,
 	},
 	["gathers"] = {
+		["avg"] = 0,
+		["current"] = 0,
+		["min"] = 0,
+		["max"] = 0,
+		["count"] = 0,
+	},
+	["discoveries"] = {
 		["avg"] = 0,
 		["current"] = 0,
 		["min"] = 0,
@@ -100,7 +111,7 @@ function gf.XP.update(self, event, arg1)
 		btn.button:SetWidth(btn.button:GetTextWidth())
 	end
 	if (event == "CHAT_MSG_COMBAT_XP_GAIN") then
-		gf.XP.onChatXPGain(arg1)
+		gf.XP.onChatXPGain(arg1)		
 	elseif (event == "QUEST_COMPLETE") then
 		gv.xp.questCompleteOpen = true
 	elseif (event == "PLAYER_LEVEL_UP") then
@@ -108,7 +119,7 @@ function gf.XP.update(self, event, arg1)
 		gv.xp.init = 0
 		gv.gametime.initLevel = time()
 	elseif (event == "PLAYER_XP_UPDATE") then
-		--gf.addonQuery("GlanceQuery","xperhour")
+		gf.XP.onPlayerXPUpdate()
 	end
 end
 
@@ -124,43 +135,75 @@ function gf.XP.tooltip()
 	-- still leveling
 	if var.level < gv.maxLevel then
 		tooltip.Title("Experience", "GLD")
-		tooltip.Double("Total XP Required This Level ("..var.level.." to "..(var.level+1)..")", var.cap,"WHT", "GRN")
-		tooltip.Double("XP Gained This Level ", "("..var.currentPCT.."%) "..var.current, "WHT", "GRN")
-		tooltip.Double("XP Needed To Level ", "("..var.neededPCT.."%) "..var.needed,"WHT", "GRN")
+		if IsShiftKeyDown() then 
+			tooltip.Double("Total XP Required This Level ("..var.level.." to "..(var.level+1)..")", var.cap,"WHT", "GRN")
+			tooltip.Double("XP Gained This Level ", "("..var.currentPCT.."%) "..var.current, "WHT", "GRN")
+		end
+
+		local needed ="("..var.neededPCT.."%) "..var.needed
+		if not IsShiftKeyDown() then needed = var.neededPCT.."%" end
+		tooltip.Double("XP Needed To Level ", needed,"WHT", "GRN")
+		
+		local rested ="("..var.restedPCT.."%) "..var.rested
+		if not IsShiftKeyDown() then rested = var.restedPCT.."%" end
 		if var.rested > 0 then
-			tooltip.Double("Rested XP ", "("..var.restedPCT.."%) "..var.rested, "BLU", "GRN")
+			tooltip.Double("Rested XP ", rested, "BLU", "GRN")
 		else
-			tooltip.Double("Rested XP ", "("..var.restedPCT.."%) "..var.rested, "PPL", "RED")
+			tooltip.Double("Rested XP ", rested, "PPL", "RED")
 		end
 	end
+
+	if IsShiftKeyDown() then
 	
-	-- maxed
-	if var.level == gv.maxLevel then
-		tooltip.Title("Game Time", "GLD")
-	else
-		tooltip.Space()
-		tooltip.Line("Game Time", "GLD")
+		-- maxed
+		if var.level == gv.maxLevel then
+			tooltip.Title("Game Time", "GLD")
+		else
+			tooltip.Space()
+			tooltip.Line("Game Time", "GLD")
+		end
+		
+		-- all levels
+		tooltip.Double("Total Time Played", gf.formatTime(gti.total), "WHT", "GRN")
+		tooltip.Double("Time Played This Level ", gf.formatTime(gti.level), "WHT", "GRN")
+		tooltip.Double("Time Played This Session ", gf.formatTime(gti.session), "WHT", "GRN")
 	end
-	
-	-- all levels
-	tooltip.Double("Total Time Played", gf.formatTime(gti.total), "WHT", "GRN")
-	tooltip.Double("Time Played This Level ", gf.formatTime(gti.level), "WHT", "GRN")
-	tooltip.Double("Time Played This Session ", gf.formatTime(gti.session), "WHT", "GRN")
 	
 	-- still leveling
 	if var.level < gv.maxLevel then
-		if var.xperhour ~= 0 then
+		--if var.xperhour ~= 0 then
 			tooltip.Space()
 			tooltip.Line("Leveling Speed", "GLD")
-			tooltip.Double("XP/Hour ", var.xperhour, "WHT", "GRN")
+			if IsShiftKeyDown() then
+				tooltip.Double("XP/Hour ", var.xperhour, "WHT", "GRN")
+			else
+				tooltip.Double("XP/Hour ", var.xperhourPCT.."%", "WHT", "GRN")
+			end
 			tooltip.Double("Time To Level",  gf.formatTime(var.leveltime), "WHT", "GRN")
-		end
+		--end
 		tooltip.Space()
 		tooltip.Line("Leveling Stats", "GLD")
 		tooltip.Double("Kills To Level (avg "..var.kills.avg.." xp)", var.kills2level, "WHT", "GRN")
 		tooltip.Double("Quests To Level (avg "..var.quests.avg.." xp)", var.quests2level, "WHT", "GRN")
-		tooltip.Double("Gathers To Level (avg "..var.gathers.avg.." xp)", var.gathers2level, "WHT", "GRN")
+		if (GetExpansionLevel() > 0)  then tooltip.Double("Gathers To Level (avg "..var.gathers.avg.." xp)", var.gathers2level, "WHT", "GRN") end
+		tooltip.Double("Discoveries To Level (avg "..var.discoveries.avg.." xp)", var.discoveries2level, "WHT", "GRN")
 	end	
+
+	-- debugging
+	if gv.Debug then
+		tooltip.Space()
+		tooltip.Line("currentxp - initxp + accumulatedxp = sessionxp", "GLD")
+		tooltip.Line(var.current.." - "..var.init.." + "..var.accumulated.." = "..var.session, "WHT")
+		tooltip.Space()
+		tooltip.Line("sessionxp/sessiontime = xpersec", "GLD")
+		tooltip.Line(var.session.."/"..gti.session.." = "..var.xpersec, "WHT")
+		tooltip.Space()
+		tooltip.Line("xpersec*3600 = xperhour", "GLD")
+		tooltip.Line(var.xpersec.."*3600 = "..var.xperhour, "WHT")
+		tooltip.Space()
+		tooltip.Line("neededxp/xpersec = leveltime", "GLD")
+		tooltip.Line(var.needed.."/"..var.xpersec.." = "..var.leveltime, "WHT")
+	end
 	
 	-- pet
 	if var.petcap ~= 0 then
@@ -178,6 +221,7 @@ function gf.XP.tooltip()
 		tooltip.Double("Party"..gf.crossRealm(), "LVL / % / XPH", "GLD", "GLD")
 		gf.partyTooltip("XP")
 	end
+	tooltip.hasOptions = true
 end
 
 ---------------------------
@@ -209,6 +253,7 @@ function gf.XP.set()
 	var.sessionPCT    = gf.getPCT(var.session,var.cap)
 	var.xpersec       = (var.session/gti.session) or 0
 	var.xperhour      = math.ceil(var.xpersec*3600) or 0
+	var.xperhourPCT      = gf.getPCT(var.xperhour,var.cap)
 	if var.xpersec == 0 then
 		var.leveltime = 0
 	else
@@ -232,6 +277,12 @@ function gf.XP.set()
 	else
 		var.gathers2level = spc.xp.gathers2level or 0
 	end
+	if var.discoveries.avg ~= 0 then
+		var.discoveries2level = math.ceil(var.needed/var.discoveries.avg)
+		spc.xp.discoveries2level = var.discoveries2level
+	else
+		var.discoveries2level = spc.xp.discoveries2level or 0
+	end
 	var.petlevel      = UnitLevel("pet")
 	var.petcap        = select(2,GetPetExperience()) or 0
 	var.petcurrent    = select(1,GetPetExperience()) or 0
@@ -241,6 +292,7 @@ function gf.XP.set()
 	spc.xp.kills2level   = var.kills2level
 	spc.xp.quests2level  = var.quests2level
 	spc.xp.gathers2level = var.gathers2level
+	spc.xp.discoveries2level = var.discoveries2level
 end
 
 ---------------------------
@@ -252,13 +304,36 @@ function gf.XP.onChatXPGain(message)
 	if not xp then return false	end	
     if mobName ~= nil then
 		gf.stats(gv.xp.kills,xp)
+		gv.xp.slayedCreature = true
     else
 		if gv.xp.questCompleteOpen then
 			gf.stats(gv.xp.quests,xp)
-			gv.xp.questCompleteOpen = false
-		else
+		else			
 			gf.stats(gv.xp.gathers,xp)
+			gv.xp.slayedNode = true
 		end
+	end
+end
+
+---------------------------
+-- on player xp update event
+---------------------------
+function gf.XP.onPlayerXPUpdate()
+	-- turn off quest tracking (chatxp)
+	if gv.xp.questCompleteOpen then
+		gv.xp.questCompleteOpen = false
+	-- turn off kill tracking (chatxp)
+	elseif gv.xp.slayedCreature then		
+		gv.xp.slayedCreature = false
+	-- turn off gather tracking (chatxp) (retail only)
+	elseif gv.xp.slayedNode then		
+		gv.xp.slayedNode = false
+	else
+		--print("previous xp: "..tostring(gv.xp.previous))
+		local xp = UnitXP("player") - gv.xp.previous
+		--print("xp gained: "..tostring(xp))
+		gf.stats(gv.xp.discoveries,xp)
+		gv.xp.previous = UnitXP("player")
 	end
 end
 

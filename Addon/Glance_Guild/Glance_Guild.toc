@@ -3,11 +3,11 @@
 ## X-DisplayName: Guild
 ## Notes: Load on Demand Data Broker for Glance
 ## Author: vonbek
-## Version: 1.13.4.3
-## X-Updated: April 7, 2020
+## Version: 1.13.4.4
+## X-Updated: 04/21/2020
 ## X-Category: Broker
 ## X-Description: Displays the number of guild members online, their class, level, and zone.
-## X-new: 
+## X-new: Updated guild display, added motd, limited list to 20
 
 ## Dependencies: Glance
 ## LoadOnDemand: 1

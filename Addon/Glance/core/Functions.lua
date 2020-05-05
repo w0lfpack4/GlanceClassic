@@ -143,6 +143,8 @@ function gf.showTooltip(which)
 		Glance.Debug("function","showtooltip",which)
 		GameTooltip:ClearLines()
 		GameTooltip:ClearAllPoints()
+		gf.Tooltip.hasOptions = nil
+		gf.Tooltip.hasNotes = nil
 		if Glance_Local.Options.showLow then
 			GameTooltip:SetOwner(gb[which].button,"ANCHOR_TOPLEFT")
 		else
@@ -150,6 +152,10 @@ function gf.showTooltip(which)
 			GameTooltip:SetPoint("TOPLEFT", gb[which].button, "BOTTOMLEFT", 0, 0)
 		end
 		gf[which].tooltip()
+		if not IsShiftKeyDown() and (gf.Tooltip.hasOptions or gf.Tooltip.hasNotes) then
+			gf.Tooltip.Space()
+			gf.Tooltip.Line("(Hold Shift for help)","YEL")
+		end
 		if Glance_Local.Options.scaleTooltip then
 			GameTooltip:SetScale(Glance_Local.Options.frameScale)
 		end
@@ -184,6 +190,8 @@ end
 -- tooltip Options list
 ---------------------------
 function gf.Tooltip.Options(tbl)
+	gf.Tooltip.hasOptions = true
+	if not IsShiftKeyDown() then return end
 	gf.Tooltip.Space()
 	gf.Tooltip.Line("Options", "GLD")
 	for i=1,#tbl do
@@ -208,6 +216,8 @@ end
 -- tooltip notes
 ---------------------------
 function gf.Tooltip.Notes(left,shiftLeft,right,shiftRight,other)
+	gf.Tooltip.hasNotes = true
+	if not IsShiftKeyDown() then return end
 	gf.Tooltip.Space()
 	gf.Tooltip.Line("Notes", "GLD")
 	if left then gf.Tooltip.Line("(Click to "..left..".)","WHT") end
@@ -466,6 +476,7 @@ function gf.formatTime(s)
 	ts, count = string.gsub(ts,"Hr","h")
 	ts, count = string.gsub(ts,"Min","m")
 	ts, count = string.gsub(ts,"Sec","s")
+	ts, count = string.gsub(ts,"ss","s")
 	local a,b,c,d,e,f,g,h = strsplit(" ", ts) --gsub won't remove the spaces for whatever reason
 	local tsnew = ""
 	if a ~= nil and b ~= nil then tsnew = tsnew.." "..a..b end
@@ -682,7 +693,7 @@ function gf.addonResponse(prefix, message, channel, sender)
 						gv.party.a[module] = data
 					end
 				end
-				gf.showTooltip(module)
+				if GameTooltip:IsShown() and GameTooltip:IsOwned(gb[module].button) then gf.showTooltip(module) end
 			end
 		end
 	end

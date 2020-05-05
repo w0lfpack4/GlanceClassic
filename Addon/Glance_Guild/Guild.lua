@@ -55,25 +55,42 @@ function gf.Guild.tooltip()
 	if IsInGuild() then
 		GuildRoster()
 		local total = GetNumGuildMembers(true)
+		local motd = GetGuildRosterMOTD()
+		local guildName, guildRankName, guildRankIndex = GetGuildInfo("player");
 		local onlineTotal = 0
 		local guild = {}
 		for i = 1, total do
-			local name,_, _,level,class,zone,_,_,online,_,_ = GetGuildRosterInfo(i)
+			local name,_, _,level,class,zone,_,_,online,status,_ = GetGuildRosterInfo(i)
 			if online then
 				onlineTotal = onlineTotal + 1
-				table.insert(guild, {name, level, class, zone})
+				table.insert(guild, {name, level, class, zone, status})
 			end
 		end
-		tooltip.Title(onlineTotal.."/"..total.." Guild Member(s) Online", "GLD")
+		tooltip.Double("Guild: "..guildName,onlineTotal.."/"..total, "GLD", "GLD")
+		tooltip.Space()
+		tooltip.Wrap(motd,"LBL")
+		tooltip.Space()
 		table.sort(guild, function(a, b) return a[1] < b[1] end)
+		local count = 1
 		for k, v in pairs(guild) do
 			local name, realm = strsplit("-", v[1])
-			tooltip.Double(CLS[string.upper(v[3])]..name.." |r("..HEX.green..v[2].." "..CLS[string.upper(v[3])]..v[3].."|r)", v[4], "WHT", "LBL")
+			local level, class, zone, intStatus, status = v[2], string.upper(v[3]), v[4], v[5], ""
+			if intStatus == 1 then status = " |r"..HEX.red.."[Away]|r" end
+			if intStatus == 2 then status = " |r"..HEX.red.."[Busy]|r" end
+			if zone == GetZoneText() then zone = HEX.green..zone else zone = HEX.gray..zone end
+			tooltip.Double(gf.Guild.colorLevels(level).." |r"..CLS[string.upper(v[3])]..name..status, zone, "WHT", "LBL")
+			count = count + 1
+			if count > 20 then 
+				local howManyMore = (#guild-20)
+				if howManyMore > 0 then
+					tooltip.Line("|rand "..howManyMore.." more..", "WHT")
+				end
+				break
+			end
 		end
 		wipe(guild)
 	else
-		tooltip.Title("Guild Member(s)", "GLD")
-		tooltip.Line("|rYou are not in a guild.", "WHT")
+		tooltip.Title("You are not in a guild.", "GLD")
 	end
 	tooltip.Notes("open the Guild tab",nil,nil,nil,nil)
 end
@@ -86,6 +103,14 @@ function gf.Guild.click(self, button, down)
 	if button == "LeftButton" then
 		ToggleFriendsFrame(3)
 	end
+end
+
+---------------------------
+-- colorize levels
+---------------------------
+function gf.Guild.colorLevels(level)
+	local quality = string.sub(tostring(level),1,1)
+	return ga.colors.QUALITY[tonumber(quality)]..level
 end
 
 ---------------------------

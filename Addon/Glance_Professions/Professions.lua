@@ -31,7 +31,7 @@ local tooltip = gf.Tooltip
 ---------------------------
 -- variables
 ---------------------------
-local maxCap = 700
+local maxCap = 300
 --prof1, prof2, archaeology, fishing, cooking, firstAid
 ga.Professions = { gf.GetProfessions() }
 ga.ProfessionCaps = { -- add 75 to each level
@@ -273,9 +273,9 @@ Glance.Data.Mining = {
 Glance.Data.Herbalism = {
 	{"Peacebloom",1,"Darkshore, Dun Morogh, Durotar, Elwynn Forest, Loch Modan, Mulgore, Silverpine Forest, Teldrassil, The Barrens, Tirisfal Glades, Westfall"},
 	{"Silverleaf",1,"Darkshore, Dun Morogh, Durotar, Elwynn Forest, Loch Modan, Mulgore, Silverpine Forest, Teldrassil, The Barrens, Thunder Bluff, Tirisfal Glades, Westfall"},
-	{"Earthroot",15,"Darkshore, Dun Morogh, Durotar, Elwynn Forest, Loch Modan, Mulgore, Redridge Mountains, Silverpine Forest, Teldrassil, The Barrens, Tirisfal Glades, Westfall"},
+	{"Earthroot",50,"Darkshore, Dun Morogh, Durotar, Elwynn Forest, Loch Modan, Mulgore, Redridge Mountains, Silverpine Forest, Teldrassil, The Barrens, Tirisfal Glades, Westfall"},
 	{"Mageroyal",50,"Ashenvale, Darkshore, Durotar, Duskwood, Hillsbrad Foothills, Loch Modan, Redridge Mountains, Silverpine Forest, Stonetalon Mountains, Teldrassil, The Barrens, Westfall, Wetlands"},
-	{"Briarthorn",70,"Ashenvale, Darkshore, Duskwood, Hillsbrad Foothills, Loch Modan, Redridge Mountains, Silverpine Forest, The Barrens, Westfall, Wetlands"},
+	{"Briarthorn",75,"Ashenvale, Darkshore, Duskwood, Hillsbrad Foothills, Loch Modan, Redridge Mountains, Silverpine Forest, The Barrens, Westfall, Wetlands"},
 	{"Stranglekelp",85,"Alterac Mountains, Arathi Highlands, Ashenvale, Azshara, Darkshore, Desolace, Dustwallow Marsh, Feralas, Hillsbrad Foothills, Silverpine Forest, Stranglethorn Vale, Swamp of Sorrows, Tanaris, The Barrens, The Hinterlands, Westfall, Wetlands"},
 	{"Bruiseweed",100,"Alterac Mountains, Arathi Highlands, Ashenvale, Darkshore, Desolace, Hillsbrad Foothills, Loch Modan, Redridge Mountains, Silverpine Forest, Stonetalon Mountains, The Barrens, Thousand Needles, Westfall, Wetlands"},
 	{"Wild Steelbloom",115,"Alterac Mountains, Arathi Highlands, Ashenvale, Badlands, Desolace, Duskwood, Hillsbrad Foothills, Stonetalon Mountains, Stranglethorn Vale, The Barrens, Thousand Needles, Wetlands"},

@@ -3,14 +3,14 @@
 ## X-DisplayName: Glance
 ## Notes: At-A-Glance Information Bar. Coin, Friends, Guild, XP, Rep, Professions, Durability, Repair, LAG, FPS, Mem, Location, and more.
 ## Author: vonbek
-## Version: 1.13.4.3
-## X-Updated: April 14, 2020
+## Version: 1.13.4.4
+## X-Updated: 05/05/2020
 ## OptionalDeps: ACP
 ## SavedVariables: Glance_Global, Glance_Profile
 ## SavedVariablesPerCharacter: Glance_Local
 ## X-Description: At-A-Glance Information Bar. Coin, Friends, Guild, XP, Rep, Professions, Durability, Repair, LAG, FPS, Mem, Location, and more.
 ## X-Category: Companions, Guild, Unit Frames, Miscellaneous, Professions, Data Broker
-## X-New: Updated for Classic, minor bugs for changing the backdrop and playing sounds
+## X-New: Updated Friends, Guild, XP, set tooltip options and notes to show only if the shift key is held, fixed bug in party stats.
 
 core\Variables.lua
 core\Functions.lua

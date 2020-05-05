@@ -781,6 +781,14 @@ function gf.handleEvents()
 				gv.timePlayed = true
 			end
 		--save data
+		elseif (event == "MODIFIER_STATE_CHANGED") then
+			Glance.Debug("event","fired",event)
+			for k, v in pairs(gb) do
+				if GameTooltip:IsShown() and GameTooltip:GetOwner() == gb[k].button then
+					gf.showTooltip(k)
+				end
+			end
+		--save data
 		elseif (event == "PLAYER_LOGOUT") then
 			Glance.Debug("event","fired",event)
 			gf.saveAll()
@@ -915,6 +923,7 @@ function gf.Initialize()
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_LOGOUT")
 	Glance.Frames.topFrame:RegisterEvent("TIME_PLAYED_MSG")
 	Glance.Frames.topFrame:RegisterEvent("CHAT_MSG_ADDON")
+	Glance.Frames.topFrame:RegisterEvent("MODIFIER_STATE_CHANGED")
 	Glance.Frames.topFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	if (GetExpansionLevel() > 0)  then Glance.Frames.topFrame:RegisterEvent("UNIT_ENTERING_VEHICLE") end
 	if (GetExpansionLevel() > 0)  then Glance.Frames.topFrame:RegisterEvent("UNIT_EXITING_VEHICLE") end
