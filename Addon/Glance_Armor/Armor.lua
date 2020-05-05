@@ -231,9 +231,31 @@ function gf.Armor.tooltip()
 	-- repair line
 	local TotalInvCost, TotalBagCost, TotalRepairCost = gf.Armor.repair.getRepairCost()
 	if TotalRepairCost > 0 then
-		tooltip.Line("The total cost to repair your armor is: "..GetCoinTextureString(TotalRepairCost,0), "WHT")
+		tooltip.Line("The total cost to repair your armor is: "..GetCoinTextureString(TotalRepairCost,0), "WHT")	
 	else
 		tooltip.Line("Your armor is fully repaired.", "WHT")
+	end
+
+	-- durability	
+	if IsShiftKeyDown() then
+		tooltip.Space()
+		tooltip.Line("Durability", "GLD")	
+		for i = 1, #ga.slotItems do
+			local slotId = GetInventorySlotInfo(ga.slotItems[i])
+			local link = GetInventoryItemLink("player", slotId)
+			if (link) then				
+				local current, max = GetInventoryItemDurability(slotId)
+				if current ~= nil then			
+					local pct = math.floor((current/max) * 100)
+					local iname,_,rarity,level,_,_,subtype,_,equiptype = GetItemInfo(link); 
+					local ilvl = gf.Armor.iLvl.color(level)
+					local slotName = select(1,string.gsub(ga.slotItems[i],"Slot",""))
+					local slotQuality = "("..ITEM_QUALITY_COLORS[rarity].hex.._G["ITEM_QUALITY"..rarity.."_DESC"].."|r)"
+					local slotDurability = gf.Armor.getDurabilitycolor(pct).."|r%"
+					tooltip.Double(ilvl.." |r"..slotName.." |r"..slotQuality, slotDurability,"WHT", "WHT")
+				end	
+			end
+		end
 	end
 	
 	-- item levels
@@ -353,17 +375,24 @@ function gf.Armor.getDurability()
 	end
 	if most > 0 then
 		pct = math.floor((have/most) * 100)
-		if pct >= 75 then
-			sOut = HEX.green..pct
-		elseif pct < 75 and pct > 50 then
-			sOut = HEX.yellow..pct
-		else
-			sOut = HEX.red..pct
-		end
+		sOut = gf.Armor.getDurabilitycolor(pct)
 	end
-	return sOut or HEX.gray.."0"
+	return sOut
 end
 
+---------------------------
+-- durability (color)
+---------------------------
+function gf.Armor.getDurabilitycolor(pct)
+	if pct >= 75 then
+		sOut = HEX.green..pct
+	elseif pct < 75 and pct > 50 then
+		sOut = HEX.yellow..pct
+	else
+		sOut = HEX.red..pct
+	end
+	return sOut
+end
 
 
 ------------------------------------------------------------------------------------------------------------
@@ -532,30 +561,18 @@ function gf.Armor.iLvl.color(iLvl,unit,rgb)
 	local legendary = pl+4
 	local uncommon = pl
 	local common = pl-4
-	local poor = pl-8		
-	local r, g, b, hex
-	if iLvl <= poor then 
-		r, g, b, hex = GetItemQualityColor(0); --poor
-	end
-	if iLvl > poor and iLvl <= common then 
-		r, g, b, hex = GetItemQualityColor(1); -- common
-	end
-	if iLvl > common and iLvl <= uncommon then 
-		r, g, b, hex = GetItemQualityColor(2); -- uncommon
-	end
-	if iLvl > uncommon and iLvl <= legendary then 
-		r, g, b, hex = GetItemQualityColor(3); -- legendary
-	end
-	if iLvl > legendary and iLvl <= epic then 
-		r, g, b, hex = GetItemQualityColor(4); -- epic
-	end
-	if iLvl > epic then 
-		r, g, b, hex = GetItemQualityColor(5); -- rare
-	end
+	local poor = pl-8	
+	local rarity = 0
+	if iLvl <= poor then rarity = 0 end --poor
+	if iLvl > poor and iLvl <= common then rarity = 1 end -- common
+	if iLvl > common and iLvl <= uncommon then rarity = 2 end -- uncommon
+	if iLvl > uncommon and iLvl <= legendary then rarity = 3 end -- legendary
+	if iLvl > legendary and iLvl <= epic then rarity = 4 end -- epic
+	if iLvl > epic then rarity = 5 end -- legendary
 	if not rgb then
-		return "|c"..hex..iLvl
+		return ITEM_QUALITY_COLORS[rarity].hex..iLvl
 	else
-		return r,g,b
+		return ITEM_QUALITY_COLORS[rarity].r,ITEM_QUALITY_COLORS[rarity].g,ITEM_QUALITY_COLORS[rarity].b
 	end
 end
 
@@ -693,13 +710,14 @@ function gf.Armor.iLvl.preload(unit)
 	end
 	for i = 1,#ga.slotItems do
 		local link = nil
+		local slotId = GetInventorySlotInfo(ga.slotItems[i])
 		if (ga.slotItems[i] ~= "ShirtSlot" and ga.slotItems[i] ~= "TabardSlot") then
 			-- player
 			if (UnitIsUnit("target","player")) then
-				link = GetInventoryItemLink(GetUnitName("target",true),GetInventorySlotInfo(ga.slotItems[i]));
+				link = GetInventoryItemLink(GetUnitName("target",true),slotId);
 			-- target
 			else
-				link = GetInventoryItemLink("target",GetInventorySlotInfo(ga.slotItems[i]));
+				link = GetInventoryItemLink("target",slotId);
 			end
 			if (link) then local iname,_,rarity,level,_,_,subtype,_,equiptype = GetItemInfo(link); end	
 			-- the textures if the items are already available
@@ -763,16 +781,17 @@ function gf.Armor.iLvl.scan(unit)
 	-- iterate equipment
 	for i = 1,#ga.slotItems do
 		local link = nil
+		local slotId = GetInventorySlotInfo(ga.slotItems[i])
 
 		-- not the shirt
 		if (ga.slotItems[i] ~= "ShirtSlot" and ga.slotItems[i] ~= "TabardSlot") then
 
 			-- player
 			if (unit == "player") then
-				link = GetInventoryItemLink(GetUnitName(unit,true),GetInventorySlotInfo(ga.slotItems[i]));
+				link = GetInventoryItemLink(GetUnitName(unit,true),slotId);
 			-- target
 			else
-				link = GetInventoryItemLink(unit,GetInventorySlotInfo(ga.slotItems[i]));
+				link = GetInventoryItemLink(unit,slotId);
 			end
 
 			-- if we get a link
